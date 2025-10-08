@@ -1,0 +1,255 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    <h1>Dashboard</h1>
+{% endblock %}
+
+{% block main %}
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">{{ widgets.statistics.totalProducts }}</h4>
+                            <p class="mb-0">Products</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-box fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">{{ widgets.statistics.totalCustomers }}</h4>
+                            <p class="mb-0">Customers</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">{{ widgets.statistics.totalOrders }}</h4>
+                            <p class="mb-0">Orders</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-shopping-cart fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">{{ widgets.statistics.totalSuppliers }}</h4>
+                            <p class="mb-0">Suppliers</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-truck fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue and Order Status Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Total Revenue</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="text-success">${{ widgets.revenueStatistics.totalRevenue|number_format(2) }}</h3>
+                    <p class="text-muted mb-0">All time revenue</p>
+                    <small class="text-muted">Average order value: ${{ widgets.revenueStatistics.averageOrderValue|number_format(2) }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Orders by Status</h5>
+                </div>
+                <div class="card-body">
+                    {% for status, data in widgets.revenueStatistics.ordersByStatus %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-capitalize">{{ status|replace({'_': ' '}) }}</span>
+                            <span class="badge badge-secondary">{{ data.count }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Widgets Row -->
+    <div class="row">
+        <!-- Pending Orders Widget -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Orders Requiring Attention</h5>
+                    <span class="badge badge-warning">{{ widgets.pendingOrders.totalOrdersRequiringAttention }}</span>
+                </div>
+                <div class="card-body">
+                    {% if widgets.pendingOrders.ordersRequiringAttention|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in widgets.pendingOrders.ordersRequiringAttention|slice(0, 5) %}
+                                        <tr>
+                                            <td>{{ order.orderNumber }}</td>
+                                            <td>{{ order.customer.fullName }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ order.status == 'pending' ? 'warning' : 'info' }}">
+                                                    {{ order.status|title }}
+                                                </span>
+                                            </td>
+                                            <td>${{ order.totalAmount|number_format(2) }}</td>
+                                            <td>{{ order.createdAt|date('M d, Y') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if widgets.pendingOrders.totalOrdersRequiringAttention > 5 %}
+                            <div class="text-center">
+                                <small class="text-muted">Showing 5 of {{ widgets.pendingOrders.totalOrdersRequiringAttention }} orders requiring attention</small>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted mb-0">No orders requiring attention</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Alerts Widget -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Low Stock Alerts</h5>
+                    <span class="badge badge-danger">{{ widgets.lowStockAlerts.totalLowStockProducts }}</span>
+                </div>
+                <div class="card-body">
+                    {% if widgets.lowStockAlerts.lowStockProducts|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>SKU</th>
+                                        <th>Stock</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in widgets.lowStockAlerts.lowStockProducts|slice(0, 5) %}
+                                        <tr>
+                                            <td>{{ product.name }}</td>
+                                            <td>{{ product.sku }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ product.stockLevel == 0 ? 'danger' : 'warning' }}">
+                                                    {{ product.stockLevel }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-{{ product.status == 'available' ? 'success' : 'secondary' }}">
+                                                    {{ product.status|title }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if widgets.lowStockAlerts.totalLowStockProducts > 5 %}
+                            <div class="text-center">
+                                <small class="text-muted">Showing 5 of {{ widgets.lowStockAlerts.totalLowStockProducts }} low stock products</small>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted mb-0">All products have sufficient stock</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Widget -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Orders (Last {{ widgets.recentActivity.days }} Days)</h5>
+                    <span class="badge badge-info">{{ widgets.recentActivity.totalRecentOrders }}</span>
+                </div>
+                <div class="card-body">
+                    {% if widgets.recentActivity.recentOrders|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in widgets.recentActivity.recentOrders %}
+                                        <tr>
+                                            <td>{{ order.orderNumber }}</td>
+                                            <td>{{ order.customer.fullName }}</td>
+                                            <td>
+                                                <span class="badge badge-{% if order.status == 'pending' %}warning{% elseif order.status == 'processing' %}info{% elseif order.status == 'shipped' %}primary{% elseif order.status == 'delivered' %}success{% else %}secondary{% endif %}">
+                                                    {{ order.status|title }}
+                                                </span>
+                                            </td>
+                                            <td>${{ order.totalAmount|number_format(2) }}</td>
+                                            <td>{{ order.createdAt|date('M d, Y H:i') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No recent orders</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

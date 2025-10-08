@@ -18,3 +18,32 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # JWT Event Listeners
+    App\EventListener\JWTCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    App\EventListener\JWTAuthenticatedListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_authenticated, method: onJWTAuthenticated }
+
+    # Exception Listener
+    App\EventListener\ExceptionListener:
+        arguments:
+            $environment: '%kernel.environment%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 10 }
+
+    # Validation Services
+    App\Service\ErrorResponseService: ~
+    App\Service\RequestValidationService: ~
+
+    # Custom Validators
+    App\Validator\Constraints\StrongPasswordValidator:
+        tags:
+            - { name: validator.constraint_validator }
+
+    App\Validator\Constraints\UniqueEmailValidator:
+        tags:
+            - { name: validator.constraint_validator }

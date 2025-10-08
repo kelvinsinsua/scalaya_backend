@@ -1,0 +1,71 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_title %}Access Denied{% endblock %}
+
+{% block content_title %}
+    <h1 class="title">
+        <i class="fas fa-ban text-danger"></i>
+        Access Denied
+    </h1>
+{% endblock %}
+
+{% block main %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-shield-alt text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="card-title text-danger mb-3">Access Denied</h2>
+                    
+                    <p class="card-text mb-4">
+                        You don't have sufficient permissions to access this section of the admin panel.
+                    </p>
+                    
+                    {% if user_roles is defined and user_roles is not empty %}
+                        <div class="alert alert-info">
+                            <strong>Your current roles:</strong>
+                            <ul class="list-unstyled mb-0 mt-2">
+                                {% for role in user_roles %}
+                                    {% if role != 'ROLE_USER' %}
+                                        <li>
+                                            <span class="badge badge-secondary">{{ role }}</span>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <p class="text-muted mb-3">
+                            If you believe you should have access to this section, please contact your administrator.
+                        </p>
+                        
+                        <div class="btn-group" role="group">
+                            <a href="{{ path('admin') }}" class="btn btn-primary">
+                                <i class="fas fa-home"></i>
+                                Return to Dashboard
+                            </a>
+                            <a href="javascript:history.back()" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i>
+                                Go Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <small class="text-muted">
+                    <strong>Role-based Access Control Information:</strong><br>
+                    <strong>ROLE_ADMIN:</strong> Full access to all sections<br>
+                    <strong>ROLE_MANAGER:</strong> Access to products, customers, orders, and suppliers<br>
+                    <strong>ROLE_OPERATOR:</strong> Access to customers and orders only
+                </small>
+            </div>
+        </div>
+    </div>
+{% endblock %}

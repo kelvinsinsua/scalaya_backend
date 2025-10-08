@@ -1,0 +1,30 @@
+{% if field.value is not empty %}
+    <div class="order-items-table">
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Supplier</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in field.value %}
+                    <tr>
+                        <td><strong>{{ item.product_name }}</strong></td>
+                        <td><code>{{ item.product_sku }}</code></td>
+                        <td><small class="text-muted">{{ item.supplier }}</small></td>
+                        <td><span class="badge badge-info">{{ item.quantity }}</span></td>
+                        <td>${{ item.unit_price }}</td>
+                        <td><strong>${{ item.line_total }}</strong></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <span class="text-muted">No items</span>
+{% endif %}

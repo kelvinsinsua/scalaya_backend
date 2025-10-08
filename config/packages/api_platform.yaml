@@ -1,0 +1,31 @@
+api_platform:
+    title: 'Dropshipping Platform API'
+    version: '1.0.0'
+    description: 'REST API for dropshipping platform management'
+    
+    # OpenAPI configuration
+    openapi:
+        contact:
+            name: 'API Support'
+            email: 'api-support@example.com'
+        license:
+            name: 'Proprietary'
+    
+    # Formats
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
+    
+    # Error handling
+    show_webby: false
+    
+    # Default configuration
+    defaults:
+        stateless: true
+        pagination_items_per_page: 20
+        pagination_maximum_items_per_page: 100
+        pagination_page_parameter_name: 'page'
+        pagination_items_per_page_parameter_name: 'itemsPerPage'
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']

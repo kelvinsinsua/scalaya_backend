@@ -1,0 +1,177 @@
+address:
+  first_name:
+    not_blank: 'First name is required'
+    max_length: 'First name cannot be longer than {{ limit }} characters'
+  last_name:
+    not_blank: 'Last name is required'
+    max_length: 'Last name cannot be longer than {{ limit }} characters'
+  company:
+    max_length: 'Company name cannot be longer than {{ limit }} characters'
+  address_line1:
+    not_blank: 'Address line 1 is required'
+    max_length: 'Address line 1 cannot be longer than {{ limit }} characters'
+  address_line2:
+    max_length: 'Address line 2 cannot be longer than {{ limit }} characters'
+  city:
+    not_blank: 'City is required'
+    max_length: 'City cannot be longer than {{ limit }} characters'
+  state:
+    not_blank: 'State is required'
+    max_length: 'State cannot be longer than {{ limit }} characters'
+  postal_code:
+    not_blank: 'Postal code is required'
+    max_length: 'Postal code cannot be longer than {{ limit }} characters'
+  country:
+    not_blank: 'Country is required'
+    exact_length: 'Country must be exactly {{ limit }} characters (ISO 3166-1 alpha-2)'
+    invalid: 'Please provide a valid country code'
+  phone:
+    max_length: 'Phone number cannot be longer than {{ limit }} characters'
+    invalid_format: 'Please provide a valid phone number format'
+
+supplier:
+  company_name:
+    not_blank: 'Company name is required'
+    max_length: 'Company name cannot be longer than {{ limit }} characters'
+  contact_email:
+    not_blank: 'Contact email is required'
+    invalid: 'Please provide a valid email address'
+    max_length: 'Contact email cannot be longer than {{ limit }} characters'
+  contact_person:
+    max_length: 'Contact person name cannot be longer than {{ limit }} characters'
+  phone:
+    max_length: 'Phone number cannot be longer than {{ limit }} characters'
+    invalid_format: 'Please provide a valid phone number format'
+  status:
+    not_blank: 'Status is required'
+    invalid: 'Status must be either "active" or "inactive"'
+
+product:
+  name:
+    not_blank: 'Product name is required'
+    max_length: 'Product name cannot be longer than {{ limit }} characters'
+  sku:
+    not_blank: 'SKU is required'
+    max_length: 'SKU cannot be longer than {{ limit }} characters'
+    unique: 'This SKU is already in use'
+  supplier_reference:
+    not_blank: 'Supplier reference is required'
+    max_length: 'Supplier reference cannot be longer than {{ limit }} characters'
+  cost_price:
+    not_blank: 'Cost price is required'
+    positive: 'Cost price must be zero or positive'
+  selling_price:
+    not_blank: 'Selling price is required'
+    positive: 'Selling price must be zero or positive'
+  weight:
+    positive: 'Weight must be zero or positive'
+  category:
+    max_length: 'Category cannot be longer than {{ limit }} characters'
+  stock_level:
+    not_null: 'Stock level is required'
+    positive: 'Stock level must be zero or positive'
+  status:
+    not_blank: 'Status is required'
+    invalid: 'Status must be "available", "out_of_stock", or "discontinued"'
+  supplier:
+    not_null: 'Supplier is required'
+  images:
+    invalid_url: 'Each image must be a valid URL'
+    max_count: 'Cannot have more than {{ limit }} images'
+  dimensions:
+    width:
+      numeric: 'Width must be a number'
+      positive: 'Width must be zero or positive'
+    height:
+      numeric: 'Height must be a number'
+      positive: 'Height must be zero or positive'
+    depth:
+      numeric: 'Depth must be a number'
+      positive: 'Depth must be zero or positive'
+    extra_fields: 'Only width, height, and depth are allowed in dimensions'
+
+customer:
+  email:
+    not_blank: 'Email is required'
+    invalid: 'Please provide a valid email address'
+    max_length: 'Email cannot be longer than {{ limit }} characters'
+    unique: 'This email address is already registered'
+  first_name:
+    not_blank: 'First name is required'
+    max_length: 'First name cannot be longer than {{ limit }} characters'
+  last_name:
+    not_blank: 'Last name is required'
+    max_length: 'Last name cannot be longer than {{ limit }} characters'
+  phone:
+    max_length: 'Phone number cannot be longer than {{ limit }} characters'
+    invalid_format: 'Please provide a valid phone number format'
+  status:
+    not_blank: 'Status is required'
+    invalid: 'Status must be "active", "inactive", or "blocked"'
+
+order:
+  subtotal:
+    not_null: 'Subtotal is required'
+    positive: 'Subtotal must be zero or positive'
+    mismatch: 'Subtotal ({{ actual }}) does not match sum of line items ({{ expected }})'
+  tax_amount:
+    not_null: 'Tax amount is required'
+    positive: 'Tax amount must be zero or positive'
+  shipping_amount:
+    not_null: 'Shipping amount is required'
+    positive: 'Shipping amount must be zero or positive'
+  total_amount:
+    not_null: 'Total amount is required'
+    positive: 'Total amount must be zero or positive'
+    mismatch: 'Total amount ({{ actual }}) does not match calculated total ({{ expected }})'
+    minimum: 'Order total must be at least ${{ minimum }}'
+  status:
+    not_blank: 'Status is required'
+    invalid: 'Status must be "pending", "processing", "shipped", "delivered", or "cancelled"'
+  shipping_address:
+    not_null: 'Shipping address is required'
+  customer:
+    not_null: 'Customer is required'
+  order_items:
+    min_count: 'Order must have at least one item'
+    empty: 'Order cannot be empty'
+  totals:
+    invalid: 'Order totals are invalid'
+
+order_item:
+  quantity:
+    not_null: 'Quantity is required'
+    positive: 'Quantity must be greater than zero'
+  unit_price:
+    not_null: 'Unit price is required'
+    positive: 'Unit price must be zero or positive'
+  line_total:
+    not_null: 'Line total is required'
+    positive: 'Line total must be zero or positive'
+  order:
+    not_null: 'Order is required'
+  product:
+    not_null: 'Product is required'
+  insufficient_stock: 'Insufficient stock for {{ product }}. Requested: {{ requested }}, Available: {{ available }}'
+  product_not_available: 'Product {{ product }} is not available (status: {{ status }})'
+
+admin_user:
+  email:
+    not_blank: 'Email is required'
+    invalid: 'Please provide a valid email address'
+    max_length: 'Email cannot be longer than {{ limit }} characters'
+  roles:
+    not_blank: 'At least one role is required'
+    min_count: 'Admin user must have at least one role'
+  password:
+    not_blank: 'Password is required'
+    min_length: 'Password must be at least {{ limit }} characters long'
+  first_name:
+    not_blank: 'First name is required'
+    max_length: 'First name cannot be longer than {{ limit }} characters'
+  last_name:
+    not_blank: 'Last name is required'
+    max_length: 'Last name cannot be longer than {{ limit }} characters'
+  status:
+    not_blank: 'Status is required'
+    invalid: 'Status must be either "active" or "inactive"'

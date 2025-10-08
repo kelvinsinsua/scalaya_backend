@@ -1,0 +1,189 @@
+address:
+  first_name:
+    not_blank: 'El nombre es obligatorio'
+    max_length: 'El nombre no puede tener más de {{ limit }} caracteres'
+  last_name:
+    not_blank: 'El apellido es obligatorio'
+    max_length: 'El apellido no puede tener más de {{ limit }} caracteres'
+  company:
+    max_length: 'El nombre de la empresa no puede tener más de {{ limit }} caracteres'
+  address_line1:
+    not_blank: 'La dirección línea 1 es obligatoria'
+    max_length: 'La dirección línea 1 no puede tener más de {{ limit }} caracteres'
+  address_line2:
+    max_length: 'La dirección línea 2 no puede tener más de {{ limit }} caracteres'
+  city:
+    not_blank: 'La ciudad es obligatoria'
+    max_length: 'La ciudad no puede tener más de {{ limit }} caracteres'
+  state:
+    not_blank: 'El estado/provincia es obligatorio'
+    max_length: 'El estado/provincia no puede tener más de {{ limit }} caracteres'
+  postal_code:
+    not_blank: 'El código postal es obligatorio'
+    max_length: 'El código postal no puede tener más de {{ limit }} caracteres'
+  country:
+    not_blank: 'El país es obligatorio'
+    exact_length: 'El país debe tener exactamente {{ limit }} caracteres (ISO 3166-1 alpha-2)'
+    invalid: 'Por favor proporcione un código de país válido'
+  phone:
+    max_length: 'El número de teléfono no puede tener más de {{ limit }} caracteres'
+
+supplier:
+  company_name:
+    not_blank: 'El nombre de la empresa es obligatorio'
+    max_length: 'El nombre de la empresa no puede tener más de {{ limit }} caracteres'
+  contact_email:
+    not_blank: 'El email de contacto es obligatorio'
+    invalid: 'Por favor proporcione una dirección de email válida'
+    max_length: 'El email de contacto no puede tener más de {{ limit }} caracteres'
+  contact_person:
+    max_length: 'El nombre de la persona de contacto no puede tener más de {{ limit }} caracteres'
+  phone:
+    max_length: 'El número de teléfono no puede tener más de {{ limit }} caracteres'
+  status:
+    not_blank: 'El estado es obligatorio'
+    invalid: 'El estado debe ser "active" o "inactive"'
+
+product:
+  name:
+    not_blank: 'El nombre del producto es obligatorio'
+    max_length: 'El nombre del producto no puede tener más de {{ limit }} caracteres'
+  sku:
+    not_blank: 'El SKU es obligatorio'
+    max_length: 'El SKU no puede tener más de {{ limit }} caracteres'
+    unique: 'Este SKU ya está en uso'
+  supplier_reference:
+    not_blank: 'La referencia del proveedor es obligatoria'
+    max_length: 'La referencia del proveedor no puede tener más de {{ limit }} caracteres'
+  cost_price:
+    not_blank: 'El precio de costo es obligatorio'
+    positive: 'El precio de costo debe ser cero o positivo'
+  selling_price:
+    not_blank: 'El precio de venta es obligatorio'
+    positive: 'El precio de venta debe ser cero o positivo'
+  weight:
+    positive: 'El peso debe ser cero o positivo'
+  category:
+    max_length: 'La categoría no puede tener más de {{ limit }} caracteres'
+  stock_level:
+    not_null: 'El nivel de stock es obligatorio'
+    positive: 'El nivel de stock debe ser cero o positivo'
+  status:
+    not_blank: 'El estado es obligatorio'
+    invalid: 'El estado debe ser "available", "out_of_stock" o "discontinued"'
+  supplier:
+    not_null: 'El proveedor es obligatorio'
+
+customer:
+  email:
+    not_blank: 'El email es obligatorio'
+    invalid: 'Por favor proporcione una dirección de email válida'
+    max_length: 'El email no puede tener más de {{ limit }} caracteres'
+    unique: 'Esta dirección de email ya está registrada'
+  first_name:
+    not_blank: 'El nombre es obligatorio'
+    max_length: 'El nombre no puede tener más de {{ limit }} caracteres'
+  last_name:
+    not_blank: 'El apellido es obligatorio'
+    max_length: 'El apellido no puede tener más de {{ limit }} caracteres'
+  phone:
+    max_length: 'El número de teléfono no puede tener más de {{ limit }} caracteres'
+  status:
+    not_blank: 'El estado es obligatorio'
+    invalid: 'El estado debe ser "active", "inactive" o "blocked"'
+
+# Additional validation messages for enhanced validation
+enhanced_address:
+  phone:
+    invalid_format: 'Por favor proporcione un formato de teléfono válido'
+
+enhanced_supplier:
+  phone:
+    invalid_format: 'Por favor proporcione un formato de teléfono válido'
+
+enhanced_product:
+  images:
+    invalid_url: 'Cada imagen debe ser una URL válida'
+    max_count: 'No puede tener más de {{ limit }} imágenes'
+  dimensions:
+    width:
+      numeric: 'El ancho debe ser un número'
+      positive: 'El ancho debe ser cero o positivo'
+    height:
+      numeric: 'La altura debe ser un número'
+      positive: 'La altura debe ser cero o positiva'
+    depth:
+      numeric: 'La profundidad debe ser un número'
+      positive: 'La profundidad debe ser cero o positiva'
+    extra_fields: 'Solo se permiten ancho, altura y profundidad en las dimensiones'
+
+enhanced_customer:
+  phone:
+    invalid_format: 'Por favor proporcione un formato de teléfono válido'
+
+order:
+  subtotal:
+    not_null: 'El subtotal es obligatorio'
+    positive: 'El subtotal debe ser cero o positivo'
+    mismatch: 'El subtotal ({{ actual }}) no coincide con la suma de los artículos ({{ expected }})'
+  tax_amount:
+    not_null: 'El monto de impuestos es obligatorio'
+    positive: 'El monto de impuestos debe ser cero o positivo'
+  shipping_amount:
+    not_null: 'El monto de envío es obligatorio'
+    positive: 'El monto de envío debe ser cero o positivo'
+  total_amount:
+    not_null: 'El monto total es obligatorio'
+    positive: 'El monto total debe ser cero o positivo'
+    mismatch: 'El monto total ({{ actual }}) no coincide con el total calculado ({{ expected }})'
+    minimum: 'El total del pedido debe ser al menos ${{ minimum }}'
+  status:
+    not_blank: 'El estado es obligatorio'
+    invalid: 'El estado debe ser "pending", "processing", "shipped", "delivered" o "cancelled"'
+  shipping_address:
+    not_null: 'La dirección de envío es obligatoria'
+  customer:
+    not_null: 'El cliente es obligatorio'
+  order_items:
+    min_count: 'El pedido debe tener al menos un artículo'
+    empty: 'El pedido no puede estar vacío'
+  totals:
+    invalid: 'Los totales del pedido son inválidos'
+
+order_item:
+  quantity:
+    not_null: 'La cantidad es obligatoria'
+    positive: 'La cantidad debe ser mayor que cero'
+  unit_price:
+    not_null: 'El precio unitario es obligatorio'
+    positive: 'El precio unitario debe ser cero o positivo'
+  line_total:
+    not_null: 'El total de línea es obligatorio'
+    positive: 'El total de línea debe ser cero o positivo'
+  order:
+    not_null: 'El pedido es obligatorio'
+  product:
+    not_null: 'El producto es obligatorio'
+  insufficient_stock: 'Stock insuficiente para {{ product }}. Solicitado: {{ requested }}, Disponible: {{ available }}'
+  product_not_available: 'El producto {{ product }} no está disponible (estado: {{ status }})'
+
+admin_user:
+  email:
+    not_blank: 'El email es obligatorio'
+    invalid: 'Por favor proporcione una dirección de email válida'
+    max_length: 'El email no puede tener más de {{ limit }} caracteres'
+  roles:
+    not_blank: 'Se requiere al menos un rol'
+    min_count: 'El usuario administrador debe tener al menos un rol'
+  password:
+    not_blank: 'La contraseña es obligatoria'
+    min_length: 'La contraseña debe tener al menos {{ limit }} caracteres'
+  first_name:
+    not_blank: 'El nombre es obligatorio'
+    max_length: 'El nombre no puede tener más de {{ limit }} caracteres'
+  last_name:
+    not_blank: 'El apellido es obligatorio'
+    max_length: 'El apellido no puede tener más de {{ limit }} caracteres'
+  status:
+    not_blank: 'El estado es obligatorio'
+    invalid: 'El estado debe ser "active" o "inactive"'

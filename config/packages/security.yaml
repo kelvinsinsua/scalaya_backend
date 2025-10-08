@@ -5,10 +5,51 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+        admin_provider:
+            entity:
+                class: App\Entity\AdminUser
+                property: email
+        customer_provider:
+            id: App\Security\CustomerUserProvider
+        supplier_provider:
+            id: App\Security\SupplierUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
+        # JWT Authentication for Customer API endpoints
+        customer_api:
+            pattern: ^/api/customer
+            stateless: true
+            provider: customer_provider
+            jwt: ~
+            
+        # JWT Authentication for Supplier API endpoints  
+        supplier_api:
+            pattern: ^/api/supplier
+            stateless: true
+            provider: supplier_provider
+            jwt: ~
+            
+        # General API Platform endpoints
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: admin_provider
+            jwt: ~
+            
+        admin:
+            pattern: ^/admin
+            provider: admin_provider
+            custom_authenticator: App\Security\AdminAuthenticator
+            access_denied_handler: App\Security\AdminAccessDeniedHandler
+            logout:
+                path: admin_logout
+                target: admin_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week
         main:
             lazy: true
             provider: users_in_memory
@@ -22,8 +63,23 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # Admin access control
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_MANAGER, ROLE_OPERATOR] }
+        
+        # Customer API access control
+        - { path: ^/api/customer/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/customer/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/customer/password-recovery, roles: PUBLIC_ACCESS }
+        - { path: ^/api/customer/password-reset, roles: PUBLIC_ACCESS }
+        - { path: ^/api/customer, roles: ROLE_CUSTOMER }
+        
+        # Supplier API access control
+        - { path: ^/api/supplier/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/supplier/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/supplier/password-recovery, roles: PUBLIC_ACCESS }
+        - { path: ^/api/supplier/password-reset, roles: PUBLIC_ACCESS }
+        - { path: ^/api/supplier, roles: ROLE_SUPPLIER }
 
 when@test:
     security:
